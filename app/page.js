@@ -1,9 +1,11 @@
-import Image from "next/image";
+import React from "react";
 
-export default function Home() {
+const page = () => {
   return (
-    <div>
-      Hello there!
+    <div className="bg-grid text-white min-h-screen flex items-center justify-center">
+      Hello there 👋
     </div>
   );
-}
+};
+
+export default page;
