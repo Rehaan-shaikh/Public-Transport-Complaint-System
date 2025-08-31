@@ -11,3 +11,4 @@ export function TextAnimateDemo2({ children }) {
     </TextAnimate>
   );
 }
+
