@@ -1,36 +1,25 @@
-"use client"
-// import { useAuth } from "@/context/AuthContext";
+"use client";
 
-import React from 'react'
-import Link from "next/link";
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
+import { logoutUser } from "@/Actions/User"; // adjust path
 
+export default function LoginLogout({ user }) {
+  const handleLogout = async () => {
+    await logoutUser(); // call server action
+    window.location.href = "/"; // redirect to home after logout
+  };
 
-const LoginLogout = () => {
-    // const { user, logout } = useAuth();
+  if (user) {
     return (
-        <>
-            {/* {user ? (
-                <Button variant="secondary" onClick={logout}>
-                    Logout
-                </Button>
-            ) : (
-                <>
-                    <Button variant="default" className="text-black">
-                        <Link href="/login">Login</Link>
+      <Button variant="outline" onClick={handleLogout}>
+        Logout
+      </Button>
+    );
+  }
 
-                    </Button>
-                    <Button variant="secondary">
-                        <Link href="/register"> Register</Link>
-                    </Button>
-                </>
-            )} */}
-
-            <Button variant="default" className="text-black">
-                        <Link href="/login">Login</Link>
-            </Button>
-        </>
-    )
+  return (
+    <Button>
+      <a href="/login">Login</a>
+    </Button>
+  );
 }
-
-export default LoginLogout

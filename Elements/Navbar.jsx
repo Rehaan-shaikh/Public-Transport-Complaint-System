@@ -1,23 +1,13 @@
-"use client";
-
-import React from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+// app/components/Navbar.jsx
+import Link from "next/link";
 import {
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
-import { Menu } from "lucide-react";
-// import { ModeToggle } from "../ui/ModeToggle";
-import Link from "next/link";
 import LoginLogout from "./LoginLogout";
-// import { getCurrentUser } from "@/actions/user";
+import { getCurrentUser } from "@/Actions/User";
 
 const NAV_LINKS = [
   { name: "Home", href: "/" },
@@ -27,15 +17,15 @@ const NAV_LINKS = [
   { name: "Contact", href: "/contact" },
 ];
 
-const Navbar =() => {
-  // const user = await getCurrentUser();
-  // const isAdmin = user?.success && user.decoded?.role === "admin";
+export default async function Navbar() {
+  const user = await getCurrentUser();
+  const isAdmin = user?.success && user.decoded?.role === "admin";
 
-  // // Add dashboard link for admin
+  // Links to show
   const linksToShow = [...NAV_LINKS];
-  // if (isAdmin) {
-  //   linksToShow.push({ name: "Dashboard", href: "/dashboard" });
-  // }
+  if (isAdmin) {
+    linksToShow.push({ name: "Dashboard", href: "/dashboard" });
+  }
 
   return (
     <header className="bg-background border-b">
@@ -61,43 +51,14 @@ const Navbar =() => {
                 </NavigationMenuLink>
               </NavigationMenuItem>
             ))}
-            {/* <ModeToggle /> */}
           </NavigationMenuList>
         </NavigationMenu>
 
         {/* Auth Buttons */}
         <div className="hidden sm:flex items-center gap-4">
-          <LoginLogout />
-        </div>
-
-        {/* Mobile Menu */}
-        <div className="md:hidden">
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-64">
-              <nav className="flex flex-col gap-4 mt-4 pt-16 px-4">
-                {linksToShow.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="text-muted-foreground hover:text-foreground transition"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
-                <hr className="my-2" />
-                <LoginLogout />
-              </nav>
-            </SheetContent>
-          </Sheet>
+          <LoginLogout user={user} />
         </div>
       </div>
     </header>
   );
-};
-
-export default Navbar;
+}

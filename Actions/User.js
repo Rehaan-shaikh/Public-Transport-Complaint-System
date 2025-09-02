@@ -12,10 +12,12 @@ const JWT_SECRET = process.env.JWT_SECRET;
 // ---------------------------
 // Sign Up User (with validation)
 // ---------------------------
+
 export async function signupUser(_, formData) {
   const email = formData.get("email")?.trim();
   const password = formData.get("password");
-  const name = formData.get("name")?.trim();
+  const confirmPassword = formData.get("confirmPassword");
+  const username = formData.get("username")?.trim();
 
   const errors = {};
 
@@ -23,11 +25,17 @@ export async function signupUser(_, formData) {
   if (!email || !email.includes("@")) {
     errors.email = "Valid email is required";
   }
+
+  if (!username) {
+    errors.username = "Username is required";
+  }
+
   if (!password || password.length < 6) {
     errors.password = "Password must be at least 6 characters";
   }
-  if (!name) {
-    errors.name = "Name is required";
+
+  if (password !== confirmPassword) {
+    errors.confirmPassword = "Passwords do not match";
   }
 
   if (Object.keys(errors).length > 0) {
@@ -46,7 +54,7 @@ export async function signupUser(_, formData) {
     data: {
       email,
       password: hashedPassword,
-      name,
+      name: username,
     },
   });
 
@@ -60,12 +68,15 @@ export async function signupUser(_, formData) {
   };
 }
 
+
 // ---------------------------
 // Login User (with validation + JWT cookie)
 // ---------------------------
 export async function loginUser(_, formData) {
   const session = await auth();
   if (session?.user) {
+    console.log(session);
+    
     const email = session.user.email;
     const name = session.user.name;
 
