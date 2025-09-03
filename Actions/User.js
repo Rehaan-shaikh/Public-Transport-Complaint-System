@@ -74,7 +74,9 @@ export async function signupUser(_, formData) {
 // ---------------------------
 export async function loginUser(_, formData) {
   const session = await auth();
-  if (session?.user) {
+  console.log(session);
+  
+  if (session) {
     console.log(session);
     
     const email = session.user.email;
@@ -184,7 +186,7 @@ export async function getCurrentUser() {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     const user = await db.user.findUnique({
-      where: { id: decoded.id },
+      where: { email: decoded.email },
     });
 
     return user || null;
@@ -207,3 +209,5 @@ export async function logoutUser() {
     path: "/",
   });
 }
+
+
