@@ -74,46 +74,7 @@ export async function signupUser(_, formData) {
 // Login User (with validation + JWT cookie)
 // ---------------------------
 export async function loginUser(_, formData) {
-  const session = await auth();
-  // console.log(session);
-  
-  if (session) {
-    console.log(session.user);
-    
-    const email = session.user.email;
-    const name = session.user.name;
 
-    let existingUser = await db.user.findUnique({ where: { email } });
-
-    if (!existingUser) {
-      existingUser = await db.user.create({
-        data: {
-          email,
-          name,
-        },
-      });
-    }
-    const user = existingUser;
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    // Set cookie
-    const cookieStore = await cookies(); // ✅ updated
-    cookieStore.set("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
-      maxAge: 60 * 60,
-      path: "/",
-    });
-
-    return {
-      success: true,
-      message: "Logged in successfully",
-    };
-
-  } else {
     const email = formData.get("email")?.trim();
     const password = formData.get("password");
 
@@ -173,7 +134,6 @@ export async function loginUser(_, formData) {
       message: "Logged in successfully",
     };
   }
-}
 
 // ---------------------------
 // Get Current User
