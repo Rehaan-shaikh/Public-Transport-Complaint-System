@@ -55,6 +55,7 @@ export async function signupUser(_, formData) {
       email,
       password: hashedPassword,
       name: username,
+      provider: "credentials",
     },
   });
 

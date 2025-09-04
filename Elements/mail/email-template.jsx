@@ -13,3 +13,48 @@ export function ContactEmailTemplate({ name, email, subject, message }) {
     </div>
   );
 }
+
+
+export function OTPEmailTemplate({ otp }) {
+  return (
+    <div style={{ fontFamily: "Arial, sans-serif", lineHeight: "1.6", color: "#333" }}>
+      <h2 style={{ marginBottom: "10px", color: "#185b30" }}>🔐 Password Reset Request</h2>
+      <p>Hello,</p>
+      <p>
+        We received a request to reset your password. Use the OTP below to
+        proceed. This code is valid for <strong>2 minutes</strong>.
+      </p>
+
+      <div
+        style={{
+          margin: "20px 0",
+          padding: "15px",
+          border: "2px dashed #185b30",
+          borderRadius: "8px",
+          backgroundColor: "#f0fdf4",
+          textAlign: "center",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "24px",
+            fontWeight: "bold",
+            letterSpacing: "4px",
+            color: "#185b30",
+          }}
+        >
+          {otp}
+        </span>
+      </div>
+
+      <p style={{ marginTop: "20px" }}>
+        If you did not request this, please ignore this email. Your account is
+        safe.
+      </p>
+
+      <p style={{ marginTop: "30px", fontSize: "12px", color: "#888" }}>
+        © {new Date().getFullYear()} Your App Name. All rights reserved.
+      </p>
+    </div>
+  );
+}
