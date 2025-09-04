@@ -51,7 +51,7 @@ export default function LoginPage() {
 
   // ---------------- Forgot Password Flow ----------------
   const [showEmailDialog, setShowEmailDialog] = useState(false);
-  const [showOtpDialog, setShowOtpDialog] = useState(true);
+  const [showOtpDialog, setShowOtpDialog] = useState(false);
 
   // Step 1 → requestPasswordReset
   const [resetReqState, resetReqAction, resetReqPending] = useActionState(

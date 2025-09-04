@@ -35,8 +35,6 @@ export default async function Navbar() {
   return (
     
     <header className="bg-background border-b">
-{    console.log(session)}
-
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link

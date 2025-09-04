@@ -78,7 +78,7 @@ export async function loginUser(_, formData) {
   // console.log(session);
   
   if (session) {
-    console.log(session);
+    console.log(session.user);
     
     const email = session.user.email;
     const name = session.user.name;

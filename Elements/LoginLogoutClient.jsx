@@ -22,7 +22,6 @@ export default function LoginLogoutClient({ isLoggedIn }) {
   if (isLoggedIn) {
     return (
       <MotionButton
-        className="bg-[#185b30] text-white hover:bg-[#144d29]"
         variant="outline"
         onClick={handleLogout}
         whileHover={{ scale: 1.05 }}
@@ -36,7 +35,7 @@ export default function LoginLogoutClient({ isLoggedIn }) {
 
   return (
     <MotionButton
-      className="bg-[#185b30] text-white hover:bg-[#144d29]"
+      variant="outline"
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.90 }}
       transition={{ type: "spring", stiffness: 300 }}
