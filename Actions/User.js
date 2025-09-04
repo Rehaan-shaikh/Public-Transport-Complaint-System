@@ -74,7 +74,7 @@ export async function signupUser(_, formData) {
 // ---------------------------
 export async function loginUser(_, formData) {
   const session = await auth();
-  console.log(session);
+  // console.log(session);
   
   if (session) {
     console.log(session);

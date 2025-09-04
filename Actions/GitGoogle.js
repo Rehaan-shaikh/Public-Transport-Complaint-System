@@ -3,6 +3,6 @@
 
 import { signIn } from "@/auth";
 
-export async function githubSignIn() {
+export async function GithubIn() {
   await signIn("github");
 }

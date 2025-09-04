@@ -10,6 +10,7 @@ import {
 import LoginLogout from "./LoginLogout";
 import { getCurrentUser } from "@/Actions/User";
 import { Leaf } from "lucide-react";
+import { auth } from "@/auth";
 
 const NAV_LINKS = [
   { name: "Home", href: "/" },
@@ -28,9 +29,14 @@ export default async function Navbar() {
   if (isAdmin) {
     linksToShow.push({ name: "Dashboard", href: "/dashboard" });
   }
+    const session = auth()
+
 
   return (
+    
     <header className="bg-background border-b">
+{    console.log(session)}
+
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link

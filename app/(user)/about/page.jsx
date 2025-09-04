@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
@@ -33,7 +32,6 @@ export default function AboutPage() {
             <div className="container py-12 px-4 sm:px-6 lg:px-8">
                 {/* Theme Toggle */}
 
-
                 {/* Hero Section */}
                 <motion.section
                     initial="hidden"
@@ -42,7 +40,7 @@ export default function AboutPage() {
                     className="text-center mb-16"
                 >
                     <motion.div variants={slideUp} className="mb-8">
-                        <Avatar className="w-24 h-24 mx-auto">
+                        <Avatar className="w-24 h-24 mx-auto ring-4 ring-[#185b30]/40">
                             <AvatarImage src="/team-avatar.jpg" />
                             <AvatarFallback>TM</AvatarFallback>
                         </Avatar>
@@ -50,7 +48,7 @@ export default function AboutPage() {
 
                     <motion.h1
                         variants={slideUp}
-                        className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-600"
+                        className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-[#185b30] to-[#144d29]"
                     >
                         About Our Platform
                     </motion.h1>
@@ -72,9 +70,9 @@ export default function AboutPage() {
                     variants={fadeIn}
                     className="mb-16"
                 >
-                    <Card className="bg-background/80 backdrop-blur-sm border-border/50 shadow-lg">
+                    <Card className="bg-[#185b30]/10 backdrop-blur-sm border-[#185b30]/30 shadow-lg">
                         <CardHeader>
-                            <CardTitle className="text-2xl">Our Mission</CardTitle>
+                            <CardTitle className="text-2xl text-[#185b30]">Our Mission</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <p className="text-muted-foreground">
@@ -109,9 +107,9 @@ export default function AboutPage() {
                         }
                     ].map((feature, index) => (
                         <motion.div key={index} variants={slideUp}>
-                            <Card className="h-full hover:shadow-md transition-shadow">
+                            <Card className="h-full hover:shadow-md transition-shadow bg-background/80 backdrop-blur-sm border-border/50">
                                 <CardContent className="p-6">
-                                    <div className="text-primary font-semibold mb-2">{feature.title}</div>
+                                    <div className="text-[#185b30] font-semibold mb-2">{feature.title}</div>
                                     <p className="text-muted-foreground">{feature.description}</p>
                                 </CardContent>
                             </Card>
@@ -126,7 +124,7 @@ export default function AboutPage() {
                     viewport={{ once: false }}
                     variants={fadeIn}
                 >
-                    <h2 className="text-3xl font-bold mb-8 text-center">Meet The Team</h2>
+                    <h2 className="text-3xl font-bold mb-8 text-center text-[#185b30]">Meet The Team</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             {
@@ -158,11 +156,11 @@ export default function AboutPage() {
                                 transition={{ delay: index * 0.1 }}
                                 className="flex flex-col items-center text-center"
                             >
-                                <Avatar className="w-20 h-20 mb-4">
+                                <Avatar className="w-20 h-20 mb-4 ring-2 ring-[#185b30]/40">
                                     <AvatarImage src={member.avatar} />
                                     <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                                 </Avatar>
-                                <h3 className="font-medium">{member.name}</h3>
+                                <h3 className="font-medium text-[#185b30]">{member.name}</h3>
                                 <p className="text-sm text-muted-foreground">{member.role}</p>
                             </motion.div>
                         ))}
