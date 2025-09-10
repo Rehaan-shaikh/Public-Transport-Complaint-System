@@ -12,7 +12,9 @@ export default function ComplaintDetailsPage({ complaint }) {
   const slideUp = { hidden: { y: 50, opacity: 0 }, visible: { y: 0, opacity: 1 } };
 
   if (!complaint) return <div className="text-center mt-10">Complaint not found</div>;
-
+  
+  console.log(complaint);
+  
   const formatDate = (dateStr) =>
     new Date(dateStr).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" });
 
@@ -25,7 +27,13 @@ export default function ComplaintDetailsPage({ complaint }) {
           <CardHeader className="flex items-center justify-between">
             <CardTitle className="text-2xl flex items-center gap-2">
               <AlertCircle className="h-6 w-6 text-red-500" />
-              Status: {complaint.status === "in_progress" ? "In Progress" : "Resolved"}
+                Status: {
+                  complaint.status === "in_progress"
+                    ? "In Progress"
+                    : complaint.status === "resolved"
+                    ? "Resolved"
+                    : "Pending"
+                }
             </CardTitle>
 
             {/* Back to Tracking */}

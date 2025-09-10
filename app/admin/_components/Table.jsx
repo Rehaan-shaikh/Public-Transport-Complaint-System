@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, ChevronsLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const ComplaintTable = ({
@@ -245,7 +245,7 @@ const ComplaintTable = ({
             onClick={() => goToPage(totalPages)}
             disabled={page === totalPages}
           >
-            <ChevronLeft />
+            <ChevronsRight />
           </Button>
         </div>
       </div>

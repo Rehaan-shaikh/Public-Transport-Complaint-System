@@ -5,7 +5,6 @@ import { uploadMedia } from "@/lib/convertFiles";
 import { getCurrentUser } from "./User";
 import { db } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import { Resend } from "resend";
 import { sendStatusUpdateEmail } from "./send-email";
 
 
@@ -23,6 +22,8 @@ const complaintSchema = z.object({
 });
 
 export async function submitComplaint(prevState, formData) {
+  // console.log("aaaaaaaaaa",formData);
+  
   const user = await getCurrentUser();
   try {
     const values = Object.fromEntries(formData.entries());
@@ -40,8 +41,10 @@ export async function submitComplaint(prevState, formData) {
     const data = result.data;
 
     // ✅ Upload media files
-    const files = formData.getAll("media");
+    const files = formData.getAll("mediaFiles");
     const mediaFiles = await uploadMedia(files);
+    // console.log("bbbbbb",mediaFiles);
+    
 
     // ✅ Handle anonymity
     const isAnon = !!data.isAnonymous;
@@ -182,7 +185,7 @@ export async function getUserComplaints() {
     const complaints = await db.complaint.findMany({
       where: { userId: user.id },
       include: { remark: true },
-      // orderBy: { updatedAt: "desc" },
+        orderBy: { createdAt: "desc" },
     });
     return { success: true, data :complaints}
   } catch (err) {

@@ -33,20 +33,26 @@ export default function LoginPage() {
     errors: {},
   });
 
-  useEffect(() => {
-    if (state?.success) {
-      toast.success("Logged in Successfully 🎉", {
-        description: state.message || "Logged in user.",
-        className: "bg-[#185b30] text-white",
-      });
-      router.push("/");
-    } else if (state?.errors && Object.keys(state.errors).length > 0) {
-      toast.error("Sign-in failed", {
-        description: "Please check your details and try again.",
-        className: "bg-[#185b30] text-white",
-      });
-    }
-  }, [state, router]);
+useEffect(() => {
+  if (state?.success) {
+    toast.success("Logged in Successfully 🎉", {
+      description: state.message || "Logged in user.",
+      className: "bg-[#185b30] text-white",
+    });
+    router.push("/");
+  } else if (state?.errors && Object.keys(state.errors).length > 0) {
+    const errorMsg =
+      state.errors.message || // custom server error
+      state.errors.email ||   // email validation
+      state.errors.password || // password validation
+      "Sign-in failed";        // fallback
+
+    toast.error(errorMsg, {
+      className: "bg-[#b53030] text-white", // red background for errors
+    });
+  }
+}, [state, router]);
+
 
   // ---------------- Forgot Password Flow ----------------
   const [showEmailDialog, setShowEmailDialog] = useState(false);

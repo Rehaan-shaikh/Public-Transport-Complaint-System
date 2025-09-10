@@ -72,68 +72,62 @@ export async function signupUser(_, formData) {
 // Login User (with validation + JWT cookie)
 // ---------------------------
 export async function loginUser(_, formData) {
-  console.log(process.env.GITHUB_ID, process.env.GITHUB_SECRET ,"jshbckvhkd");
-  // console.log(session);
-  
-    const email = formData.get("email")?.trim();
-    const password = formData.get("password");
+  const email = formData.get("email")?.trim();
+  const password = formData.get("password");
 
-    const errors = {};
+  const errors = {};
 
-    if (!email || !email.includes("@")) {
-      errors.email = "Valid email is required";
-    }
-    if (!password) {
-      errors.password = "Password is required";
-    }
+  if (!email || !email.includes("@")) {
+    errors.email = "Valid email is required";
+  }
+  if (!password) {
+    errors.password = "Password is required";
+  }
 
-    if (Object.keys(errors).length > 0) {
-      return { success: false, errors };
-    }
+  if (Object.keys(errors).length > 0) {
+    return { success: false, errors };
+  }
 
-    const user = await db.user.findUnique({ where: { email } });
+  const user = await db.user.findUnique({ where: { email } });
 
-    if (!user || !user.password) {
-      return {
-        success: false,
-        errors: {
-          email: "Invalid email or password",
-          password: "Invalid email or password",
-        },
-      };
-    }
-
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
-    if (!isPasswordCorrect) {
-      return {
-        success: false,
-        errors: {
-          email: "Invalid email or password",
-          password: "Invalid email or password",
-        },
-      };
-    }
-
-    // Generate JWT
-    const token = jwt.sign({ id: user.id, email: user.email , role: user.role }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    // Set cookie
-    const cookieStore = await cookies(); // ✅ updated
-    cookieStore.set("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
-      maxAge: 60 * 60,
-      path: "/",
-    });
-
+  if (!user) {
     return {
-      success: true,
-      message: "Logged in successfully",
+      success: false,
+      errors: { message: "Email Not Found" },
     };
   }
+
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  if (!isPasswordCorrect) {
+    return {
+      success: false,
+      errors: { message: "Invalid Password for the entered email" },
+    };
+  }
+
+  // Generate JWT
+  const token = jwt.sign(
+    { id: user.id, email: user.email, role: user.role },
+    JWT_SECRET,
+    { expiresIn: "1h" }
+  );
+
+  // Set cookie
+  const cookieStore = await cookies();
+  cookieStore.set("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "Strict",
+    maxAge: 60 * 60,
+    path: "/",
+  });
+
+  return {
+    success: true,
+    message: "Logged in successfully",
+  };
+}
+
 
 // ---------------------------
 // Get Current User
