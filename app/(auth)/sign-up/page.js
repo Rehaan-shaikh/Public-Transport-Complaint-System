@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { FcGoogle } from "react-icons/fc";
 import { useTheme } from "next-themes";
-import { GithubSignIn } from "@/Elements/github-sign-in";
 import { MagicCard } from "@/components/magicui/magic-card";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 import { redirect } from "next/dist/server/api-utils";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 
 export default function SignUpPage() {
   const { theme } = useTheme();
@@ -110,28 +110,15 @@ export default function SignUpPage() {
                     className="w-full rounded-xl h-10 bg-[#185b30] text-white transition-transform duration-200 hover:scale-105 hover:bg-[#1e6d3a] active:scale-95"
                     disabled={pending}
                   >
-                    {pending ? "Signing Up..." : "Sign Up"}
+                    {pending ? (
+                      <span className="flex items-center gap-2">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                        Signing Up...
+                      </span>
+                    ) : (
+                      "Sign Up"
+                    )}
                   </Button>
-
-                  {/* Divider */}
-                  <div className="relative text-center text-xs after:absolute after:inset-0 after:top-1/2 after:flex after:items-center after:border-t after:border-border">
-                    <span className="bg-card relative z-10 px-2 text-muted-foreground">
-                      Or continue with
-                    </span>
-                  </div>
-
-                  {/* OAuth Buttons */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <GithubSignIn className="rounded-xl h-10 transition-transform duration-200 hover:scale-105" />
-                    <Button
-                      variant="outline"
-                      type="button"
-                      className="w-full h-10 flex items-center justify-center rounded-xl transition-transform duration-200 hover:scale-105"
-                    >
-                      <FcGoogle className="mr-2 h-4 w-4" />
-                      Google
-                    </Button>
-                  </div>
 
                   {/* ✅ Bottom Info */}
                   <div className="text-center text-xs text-muted-foreground space-y-2 mt-4">

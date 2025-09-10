@@ -10,7 +10,7 @@ import {
 import LoginLogout from "./LoginLogout";
 import { getCurrentUser } from "@/Actions/User";
 import { Leaf } from "lucide-react";
-import { auth } from "@/auth";
+import { SignOut } from "./sign-out";
 
 const NAV_LINKS = [
   { name: "Home", href: "/" },
@@ -21,15 +21,14 @@ const NAV_LINKS = [
 ];
 
 export default async function Navbar() {
-  const user = await getCurrentUser();
-  const isAdmin = user?.success && user.decoded?.role === "admin";
-
+  // const user = await getCurrentUser();
+  // const isAdmin = user?.success && user.decoded?.role === "admin"
   // Links to show
   const linksToShow = [...NAV_LINKS];
-  if (isAdmin) {
-    linksToShow.push({ name: "Dashboard", href: "/dashboard" });
-  }
-    const session = auth()
+  // if (isAdmin) {
+  //   linksToShow.push({ name: "Dashboard", href: "/dashboard" });
+  // }
+  //   const session = auth()
 
 
   return (
@@ -60,20 +59,10 @@ export default async function Navbar() {
             />
             {/* Exclamation */}
             <rect
-              x="11.25"
-              y="9.6"
-              width="1.5"
-              height="3.3"
-              rx=".5"
-              fill="#185b30"
+              x="11.25" y="9.6" width="1.5" height="3.3" rx=".5" fill="#185b30"
             />
             <rect
-              x="11.25"
-              y="13.6"
-              width="1.5"
-              height="1.5"
-              rx=".75"
-              fill="#185b30"
+              x="11.25" y="13.6" width="1.5" height="1.5" rx=".75" fill="#185b30"
             />
           </svg>
           MyLogo
@@ -97,7 +86,7 @@ export default async function Navbar() {
 
         {/* Auth Buttons */}
         <div className="hidden sm:flex items-center gap-4">
-          <LoginLogout user={user} />
+          <LoginLogout />
         </div>
       </div>
     </header>

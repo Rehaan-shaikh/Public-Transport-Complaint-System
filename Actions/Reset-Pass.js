@@ -18,14 +18,6 @@ export async function requestPasswordReset(prevState, formData) {
       return { success: false, error: "No account found with this email" };
     }
 
-    if (user.provider !== "credentials") {
-      return {
-        success: false,
-        error:
-          "This account uses GitHub/Google login. Please sign in with that provider.",
-      };
-    }
-
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
 

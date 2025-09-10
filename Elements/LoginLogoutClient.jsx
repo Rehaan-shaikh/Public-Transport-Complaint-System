@@ -2,19 +2,12 @@
 
 import { Button } from "@/components/ui/button";
 import { logoutUser } from "@/Actions/User"; // clears cookie
-import { signOut } from "next-auth/react";
 import { motion } from "framer-motion";
 
 export default function LoginLogoutClient({ isLoggedIn }) {
   const handleLogout = async () => {
-    try {
-      if (isLoggedIn) {
-        await signOut({ redirect: false }); // end NextAuth session
-      }
-    } finally {
       await logoutUser(); // always clear custom cookie/session
       window.location.href = "/"; // manual redirect
-    }
   };
 
   const MotionButton = motion(Button);

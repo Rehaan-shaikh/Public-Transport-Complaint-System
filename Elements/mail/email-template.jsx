@@ -58,3 +58,63 @@ export function OTPEmailTemplate({ otp }) {
     </div>
   );
 }
+
+export function StatusUpdateEmailTemplate({ complaint, status }) {
+  // Format status for display
+  const getStatusText = (status) => {
+    switch (status) {
+      case "pending":
+        return "Pending Review";
+      case "in_progress":
+        return "In Progress";
+      case "resolved":
+        return "Resolved";
+      default:
+        return status;
+    }
+  };
+
+  return (
+    <div style={{ fontFamily: "Arial, sans-serif", lineHeight: "1.6" }}>
+      <h2 style={{ color: "#185b30" }}>Complaint Status Update</h2>
+      <p>Dear {complaint.contactName || "User"},</p>
+
+      <p>
+        We are writing to inform you that the status of your complaint has been
+        updated.
+      </p>
+
+      <p>
+        <strong>Complaint ID:</strong> {complaint.id}
+        <br />
+        <strong>Description:</strong> {complaint.description}
+        <br />
+        <strong>Current Status:</strong>{" "}
+        <span style={{ color: "#185b30", fontWeight: "bold" }}>
+          {getStatusText(status)}
+        </span>
+      </p>
+
+      {status === "in_progress" && (
+        <p>
+          Our team has started working on your complaint. We will notify you
+          once it has been resolved.
+        </p>
+      )}
+
+      {status === "resolved" && (
+        <p>
+          Your complaint has been marked as <b>resolved</b>. If you believe the
+          issue still persists, please contact our support team.
+        </p>
+      )}
+
+      <p>Thank you for helping us improve the public transport system.</p>
+
+      <p style={{ marginTop: "20px" }}>
+        Regards, <br />
+        <b>Public Transport Complaint System</b>
+      </p>
+    </div>
+  );
+}

@@ -15,7 +15,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { FcGoogle } from "react-icons/fc";
-import { GithubSignIn } from "@/Elements/github-sign-in";
 import { MagicCard } from "@/components/magicui/magic-card";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -162,31 +161,14 @@ export default function LoginPage() {
                     className="w-full rounded-xl h-10 bg-[#185b30] text-white transition-transform duration-200 hover:scale-105 hover:bg-[#1e6d3a] active:scale-95"
                   >
                     {pending ? (
-                      <span className="animate-pulse">Logging in...</span>
+                      <span className="flex items-center gap-2 animate-pulse">
+                        Logging <Loader2 className="h-4 w-4 animate-spin" />
+                      </span>
                     ) : (
                       "Login"
                     )}
                   </Button>
 
-                  {/* Divider */}
-                  <div className="relative text-center text-xs after:absolute after:inset-0 after:top-1/2 after:flex after:items-center after:border-t after:border-border">
-                    <span className="bg-card relative z-10 px-2 text-muted-foreground">
-                      Or continue with
-                    </span>
-                  </div>
-
-                  {/* OAuth */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <GithubSignIn className="rounded-xl h-10 transition-transform duration-200 hover:scale-105" />
-                    <Button
-                      variant="outline"
-                      type="button"
-                      className="w-full h-10 flex items-center justify-center rounded-xl transition-transform duration-200 hover:scale-105"
-                    >
-                      <FcGoogle className="mr-2 h-4 w-4" />
-                      Google
-                    </Button>
-                  </div>
                   <div className="text-center text-xs text-muted-foreground space-y-2 mt-4">
                     <p>
                       Don&apos;t have an account?{" "}

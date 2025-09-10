@@ -1,21 +1,54 @@
 import { NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-const protectedRoutes = ["/dashboard", "/profile", "/complaints"];
+const JWT_SECRET = process.env.JWT_SECRET;
+
+const publicRoutes = ["/", "/login", "/sign-up", "/about", "/contact"];
+
+async function getUserFromToken(token) {
+  try {
+    return jwt.verify(token, JWT_SECRET);
+  } catch {
+    return null;
+  }
+}
 
 export async function middleware(req) {
-  const isAuth = req.cookies.get("auth"); // token or flag set on login
+  const token = req.cookies.get("token")?.value;
+  // console.log("token in middleware:", token);  //properly logging token
+  
+  const { pathname } = req.nextUrl;
 
-  if (protectedRoutes.some((route) => req.nextUrl.pathname.startsWith(route))) {
-    if (!isAuth) {
-      const loginUrl = new URL("/login", req.url);
-      return NextResponse.redirect(loginUrl);
+  const user = token ? await getUserFromToken(token) : null;
+  // console.log("user in middleware:", user);  //coming as null
+
+
+  // Admin restriction
+  if (user?.role === "admin") {
+    if (!pathname.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/admin", req.url));
     }
+  } else {
+    if (pathname.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+  }
+    // Public routes → always allow
+  if (publicRoutes.includes(pathname)) {
+    return NextResponse.next();
+  }
+
+    // If no user → redirect to login
+  if (!user) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   return NextResponse.next();
 }
 
-// Apply middleware to specific routes only
 export const config = {
-  matcher: ["/dashboard/:path*", "/profile/:path*", "/complaints/:path*"],
+  matcher: [
+    "/((?!_next|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js)).*)",
+  ],
+  runtime: "nodejs", // ensure node runtime
 };

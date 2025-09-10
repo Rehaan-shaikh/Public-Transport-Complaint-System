@@ -1,6 +1,5 @@
 "use server";
 
-import { auth } from "@/auth";
 import { db } from "@/lib/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -55,7 +54,6 @@ export async function signupUser(_, formData) {
       email,
       password: hashedPassword,
       name: username,
-      provider: "credentials",
     },
   });
 
@@ -74,46 +72,9 @@ export async function signupUser(_, formData) {
 // Login User (with validation + JWT cookie)
 // ---------------------------
 export async function loginUser(_, formData) {
-  const session = await auth();
+  console.log(process.env.GITHUB_ID, process.env.GITHUB_SECRET ,"jshbckvhkd");
   // console.log(session);
   
-  if (session) {
-    console.log(session.user);
-    
-    const email = session.user.email;
-    const name = session.user.name;
-
-    let existingUser = await db.user.findUnique({ where: { email } });
-
-    if (!existingUser) {
-      existingUser = await db.user.create({
-        data: {
-          email,
-          name,
-        },
-      });
-    }
-    const user = existingUser;
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    // Set cookie
-    const cookieStore = await cookies(); // ✅ updated
-    cookieStore.set("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
-      maxAge: 60 * 60,
-      path: "/",
-    });
-
-    return {
-      success: true,
-      message: "Logged in successfully",
-    };
-
-  } else {
     const email = formData.get("email")?.trim();
     const password = formData.get("password");
 
@@ -154,7 +115,7 @@ export async function loginUser(_, formData) {
     }
 
     // Generate JWT
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+    const token = jwt.sign({ id: user.id, email: user.email , role: user.role }, JWT_SECRET, {
       expiresIn: "1h",
     });
 
@@ -173,7 +134,6 @@ export async function loginUser(_, formData) {
       message: "Logged in successfully",
     };
   }
-}
 
 // ---------------------------
 // Get Current User

@@ -1,9 +1,14 @@
-import { auth } from "@/auth"; // server-only
 import LoginLogoutClient from "./LoginLogoutClient";
+import { getCurrentUser } from "@/Actions/User";
 
-export default async function LoginLogout({user}) {
-  const session = await auth(); // runs on server safely
-  const isLoggedIn = !!session || user;
+export default async function LoginLogout() {
+  const user = await getCurrentUser();
+  const isLoggedIn = !!user;
 
-  return <LoginLogoutClient isLoggedIn={isLoggedIn} />;
+  return (
+    <div>
+      {/* Force stable wrapper */}
+      <LoginLogoutClient isLoggedIn={isLoggedIn} />
+    </div>
+  );
 }
