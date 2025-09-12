@@ -23,6 +23,7 @@ const complaintSchema = z.object({
 
 export async function submitComplaint(prevData, formData) {
   try {
+    // console.log(formData);
     const user = await getCurrentUser();
 
     // Extract values
@@ -49,8 +50,8 @@ export async function submitComplaint(prevData, formData) {
 
     const data = result.data;
 
-    // Handle anonymous fields
-    const isAnon = !!data.isAnonymous;
+    const isAnon = data.isAnonymous === "true";
+
     const contactName = isAnon ? "Anonymous" : data.contactName || "Anonymous";
     const contactEmail = isAnon ? "Anonymous" : data.contactEmail || "Anonymous";
 
@@ -64,6 +65,7 @@ export async function submitComplaint(prevData, formData) {
           : null,
         contactName,
         contactEmail,
+        isAnonymous : isAnon,
         userId: user?.id || null,  //Foreign key , for connecting with the user table (can also use connect from prisma)
       },
     });

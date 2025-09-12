@@ -211,8 +211,11 @@ export default function ComplaintForm() {
                   id="isAnonymous"
                   checked={isAnonymous}
                   onCheckedChange={(checked) => setIsAnonymous(checked)}
-                  name="isAnonymous"
                 />
+                {/* Switch itself is just UI, real value comes from hidden input */}
+                {/* cause switch return value as on if checked instead of true, and on unchecked it return nothing instead of false */}
+                {/* this isnt a boolean value though, and thats y use of this hidden ip is optional  */}
+                <input type="hidden" name="isAnonymous" value={isAnonymous ? "true" : "false"} />    
               </div>
 
               {/* Contact Info */}
