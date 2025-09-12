@@ -21,7 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const ComplaintTable = ({
@@ -83,56 +83,73 @@ const ComplaintTable = ({
 
       {/* Filters */}
       <div className="bg-muted/30 p-4 rounded-xl mb-6 max-w-5xl mx-auto">
-        <div className="flex flex-wrap gap-4 justify-center">
-          <Input
-            placeholder="Search complaints..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-sm"
-          />
+        <div className="flex items-center gap-4 flex-nowrap">
+          {/* Left group: Search + Filters */}
+          <div className="flex items-center gap-4 flex-nowrap">
+            <Input
+              placeholder="Search complaints..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="max-w-sm flex-shrink-0"
+            />
 
-          {/* Status filter */}
-          <Select value={filterStatus} onValueChange={setFilterStatus}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="All">All Status</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="in_progress">In Progress</SelectItem>
-              <SelectItem value="resolved">Resolved</SelectItem>
-            </SelectContent>
-          </Select>
+            {/* Status filter */}
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-[160px] flex-shrink-0">
+                <SelectValue placeholder="Filter by Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Status</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="in_progress">In Progress</SelectItem>
+                <SelectItem value="resolved">Resolved</SelectItem>
+              </SelectContent>
+            </Select>
 
-          {/* Transport filter */}
-          <Select value={filterTransport} onValueChange={setFilterTransport}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by Transport" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="All">All Modes</SelectItem>
-              <SelectItem value="Bus">Bus</SelectItem>
-              <SelectItem value="Train">Train</SelectItem>
-              <SelectItem value="Metro">Metro</SelectItem>
-              <SelectItem value="Other">Other</SelectItem>
-            </SelectContent>
-          </Select>
+            {/* Transport filter */}
+            <Select value={filterTransport} onValueChange={setFilterTransport}>
+              <SelectTrigger className="w-[160px] flex-shrink-0">
+                <SelectValue placeholder="Filter by Transport" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Modes</SelectItem>
+                <SelectItem value="Bus">Bus</SelectItem>
+                <SelectItem value="Train">Train</SelectItem>
+                <SelectItem value="Metro">Metro</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
 
-          {/* Issue Type filter */}
-          <Select value={filterIssueType} onValueChange={setFilterIssueType}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Filter by Issue Type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="All">All Issues</SelectItem>
-              <SelectItem value="busdelay">Bus Delay</SelectItem>
-              <SelectItem value="Overcrowding">Overcrowding</SelectItem>
-              <SelectItem value="RudeStaff">Rude Staff</SelectItem>
-              <SelectItem value="UncleanVehicle">Unclean Vehicle</SelectItem>
-              <SelectItem value="FaultyAC">Faulty AC</SelectItem>
-              <SelectItem value="Other">Other</SelectItem>
-            </SelectContent>
-          </Select>
+            {/* Issue Type filter */}
+            <Select value={filterIssueType} onValueChange={setFilterIssueType}>
+              <SelectTrigger className="w-[180px] flex-shrink-0">
+                <SelectValue placeholder="Filter by Issue Type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="All">All Issues</SelectItem>
+                <SelectItem value="busdelay">Bus Delay</SelectItem>
+                <SelectItem value="Overcrowding">Overcrowding</SelectItem>
+                <SelectItem value="RudeStaff">Rude Staff</SelectItem>
+                <SelectItem value="UncleanVehicle">Unclean Vehicle</SelectItem>
+                <SelectItem value="FaultyAC">Faulty AC</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Clear Filters Button - right aligned */}
+          <Button
+            variant="outline"
+            className="h-10 w-10 p-0 flex items-center justify-center ml-auto flex-shrink-0"
+            onClick={() => {
+              setSearchTerm("");
+              setFilterStatus("All");
+              setFilterTransport("All");
+              setFilterIssueType("All");
+            }}
+          >
+            <X className="h-5 w-5" />
+          </Button>
         </div>
       </div>
 

@@ -21,53 +21,54 @@ const complaintSchema = z.object({
   contactEmail: z.string().email().optional(),
 });
 
-export async function submitComplaint(prevState, formData) {
-  // console.log("aaaaaaaaaa",formData);
-  
-  const user = await getCurrentUser();
+export async function submitComplaint(prevData, formData) {
   try {
+    const user = await getCurrentUser();
+
+    // Extract values
     const values = Object.fromEntries(formData.entries());
 
-    const result = complaintSchema.safeParse(values);
+    // Grab all media files (array of stringified objects)
+    const mediaFilesRaw = formData.getAll("mediaFiles") || [];  //like: "url":"https://...jpg","type":"image"
+    const mediaFiles = mediaFilesRaw.map((str) => JSON.parse(str)); // parse back to objects
+
+    // this syntax {fieldname : xyz , ...new obj name} from destructuring , take out "mediaFiles" into _skip (wont used) and keep the rest in valuesToValidate
+    // (excluding mediaFiles since schema not expect it)
+    const { mediaFiles: _skip, ...valuesToValidate } = values;
+
+    // safeParse is a zod function, checks values against schema and returns result
+    const result = complaintSchema.safeParse(valuesToValidate);
 
     if (!result.success) {
       const errors = {};
       result.error.issues.forEach((err) => {
         errors[err.path[0]] = err.message;
       });
-      return { errors, success: false, values }; // 👈 preserve user data
+      return { success: false, errors, values };
     }
 
     const data = result.data;
 
-    // ✅ Upload media files
-    const files = formData.getAll("mediaFiles");
-    const mediaFiles = await uploadMedia(files);
-    // console.log("bbbbbb",mediaFiles);
-    
-
-    // ✅ Handle anonymity
+    // Handle anonymous fields
     const isAnon = !!data.isAnonymous;
     const contactName = isAnon ? "Anonymous" : data.contactName || "Anonymous";
     const contactEmail = isAnon ? "Anonymous" : data.contactEmail || "Anonymous";
 
+    // Save complaint
     const complaint = await db.complaint.create({
       data: {
-        transport: data.transport,
-        issueType: data.issueType,
-        vehicleNo: data.vehicleNo,
-        location: data.location,
-        dateOfIncident: new Date(data.dateOfIncident),
-        description: data.description,
-        mediaFiles,
-        isAnonymous: isAnon,
+        ...data,
+        mediaFiles, // array of {url, type}
+        dateOfIncident: data.dateOfIncident
+          ? new Date(data.dateOfIncident)  //converting string to date
+          : null,
         contactName,
         contactEmail,
-        userId: user.id,
+        userId: user?.id || null,  //Foreign key , for connecting with the user table (can also use connect from prisma)
       },
     });
 
-    return { success: true, complaint, errors: {}, values: {} }; // reset values on success
+    return { success: true, complaint, errors: {}, values: {} };
   } catch (err) {
     console.error("Error submitting complaint:", err);
     return {
@@ -77,6 +78,7 @@ export async function submitComplaint(prevState, formData) {
     };
   }
 }
+
 
 
 export async function getAllComplaintsByPagination(page = 1, limit = 10) {  //if  nothing provided it sets defaul 1 and 10
@@ -159,8 +161,9 @@ export async function updateComplaintStatus(id, status) {
     });
     // console.log(" complaint:", complaint);
 
-    await sendStatusUpdateEmail(complaint, status);
-
+    if(complaint.contactEmail != "Anonymous"){
+      await sendStatusUpdateEmail(complaint, status);
+    }
     revalidatePath("/");
 
     return { success: true, data: updatedComplaint };
@@ -219,3 +222,11 @@ export async function getComplaintTimestamps() {
     return { success: false, data: [], error: "Failed to fetch complaint timestamps" };
   }
 }
+
+
+
+
+
+
+
+

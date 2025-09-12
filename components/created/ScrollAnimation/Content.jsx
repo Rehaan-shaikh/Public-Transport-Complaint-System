@@ -92,8 +92,8 @@ function ImageComp({ id, src, title, description }) {
 
 const content = [
   {
-    src: "/pensive-businessman-talking-phone-while-commuting-by-bus_637285-11713.avif",
-    title: "✅ Report a Problem",
+    src: "/OIP (3).webp",
+    title: "✅ Report a Problem", 
     description:
       "Select the category, location, and describe the issue anonymously or with contact.",
   },

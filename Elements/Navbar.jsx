@@ -9,8 +9,14 @@ import {
 } from "@/components/ui/navigation-menu";
 import LoginLogout from "./LoginLogout";
 import { getCurrentUser } from "@/Actions/User";
-import { Leaf } from "lucide-react";
-import { SignOut } from "./sign-out";
+import { Menu } from "lucide-react"; // for hamburger icon
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
 
 const NAV_LINKS = [
   { name: "Home", href: "/" },
@@ -21,27 +27,18 @@ const NAV_LINKS = [
 ];
 
 export default async function Navbar() {
-  // const user = await getCurrentUser();
-  // const isAdmin = user?.success && user.decoded?.role === "admin"
-  // Links to show
   const linksToShow = [...NAV_LINKS];
-  // if (isAdmin) {
-  //   linksToShow.push({ name: "Dashboard", href: "/dashboard" });
-  // }
-  //   const session = auth()
-
 
   return (
-    
     <header className="bg-background border-b">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link
           href="/"
           className="flex items-center gap-2 px-4 py-2 rounded-xl 
-                  text-[#185b30] hover:text-[#144d29] 
-                    font-extrabold text-xl tracking-wide 
-                  shadow-md hover:shadow-lg transition-all duration-300"
+            text-[#185b30] hover:text-[#144d29] 
+            font-extrabold text-xl tracking-wide 
+            shadow-md hover:shadow-lg transition-all duration-300"
         >
           <svg
             aria-hidden="true"
@@ -59,13 +56,23 @@ export default async function Navbar() {
             />
             {/* Exclamation */}
             <rect
-              x="11.25" y="9.6" width="1.5" height="3.3" rx=".5" fill="#185b30"
+              x="11.25"
+              y="9.6"
+              width="1.5"
+              height="3.3"
+              rx=".5"
+              fill="#185b30"
             />
             <rect
-              x="11.25" y="13.6" width="1.5" height="1.5" rx=".75" fill="#185b30"
+              x="11.25"
+              y="13.6"
+              width="1.5"
+              height="1.5"
+              rx=".75"
+              fill="#185b30"
             />
           </svg>
-          MyLogo
+          MyLogo!
         </Link>
 
         {/* Desktop Navigation */}
@@ -84,10 +91,53 @@ export default async function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        {/* Auth Buttons */}
+        {/* Auth Buttons (Desktop) */}
         <div className="hidden sm:flex items-center gap-4">
           <LoginLogout />
         </div>
+
+        {/* Mobile Menu */}
+<div className="md:hidden">
+  <Sheet>
+    <SheetTrigger asChild>
+      <Button variant="ghost" size="icon" className="rounded-full hover:bg-accent">
+        <Menu className="h-6 w-6" />
+      </Button>
+    </SheetTrigger>
+    <SheetTitle></SheetTitle>
+    <SheetContent
+      side="right"
+      className="w-72 px-6 py-6 flex flex-col bg-background shadow-lg"
+    >
+      {/* Drawer Header */}
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-lg font-semibold text-foreground">Menu</h2>
+      </div>
+
+      {/* Navigation Links */}
+      <nav className="flex flex-col gap-3">
+        {linksToShow.map((item) => (
+          <Link
+            key={item.name}
+            href={item.href}
+            className="px-3 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+          >
+            {item.name}
+          </Link>
+        ))}
+      </nav>
+
+      {/* Divider */}
+      <div className="my-6 border-t border-border" />
+
+      {/* Auth Buttons */}
+      <div className="mt-auto">
+        <LoginLogout />
+      </div>
+    </SheetContent>
+  </Sheet>
+</div>
+
       </div>
     </header>
   );

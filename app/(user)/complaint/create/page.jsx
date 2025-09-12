@@ -37,6 +37,8 @@ export default function ComplaintForm() {
   });
 
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const [isUploading, setIsUploading] = useState(false)
+
 
   // ✅ sync switch state with form values
   useEffect(() => {
@@ -195,7 +197,10 @@ export default function ComplaintForm() {
               </motion.div>
 
               {/* Media Upload */}
-              <UploadMediaInput name="media" state={state} />
+              
+              {/* <UploadMediaInput> renders hidden <input name="mediaFiles" /> fields.
+               When the parent form submits, the browser automatically collects all inputs inside the form (including these), and formAction reads their values. */}
+                <UploadMediaInput state={state} onUploadingChange={setIsUploading} />
 
               {/* Anonymous Switch */}
               <div className="flex items-center justify-between">
@@ -250,7 +255,7 @@ export default function ComplaintForm() {
                 <Button
                   type="submit"
                   className="w-full bg-[#185b30] hover:bg-[#144b27] text-white font-semibold py-3 rounded-lg transition-all duration-200"
-                  disabled={isPending}
+                  disabled={isPending || isUploading}
                 >
                   {isPending ? (
                     <span className="flex items-center gap-2">
@@ -260,6 +265,7 @@ export default function ComplaintForm() {
                   ) : (
                     "Submit Complaint"
                   )}
+
                 </Button>
               </motion.div>
             </form>

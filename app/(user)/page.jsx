@@ -66,6 +66,7 @@ export default function Home() {
             Step-by-Step Complaint Process
           </TextAnimateDemo2>
           
+          {/* for rendering content the images and all */}
           <Parallax />
         </div>
       </section>
